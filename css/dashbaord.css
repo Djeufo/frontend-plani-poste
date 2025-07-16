@@ -90,3 +90,40 @@ main p {
     border-left: none;
   }
 }
+
+/* Add this at the end of your CSS file */
+
+#sidebar {
+  transition: transform 0.3s ease;
+}
+
+#sidebar.closed {
+  transform: translateX(-100%);
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  z-index: 999;
+}
+
+#toggleSidebar {
+  background: #2c3e50;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  #sidebar.closed {
+    transform: translateY(-100%);
+    width: 100%;
+  }
+
+  #toggleSidebar {
+    top: 10px;
+    left: 10px;
+  }
+}

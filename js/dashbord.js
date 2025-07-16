@@ -19,3 +19,9 @@ function loadSection(file) {
 window.addEventListener("DOMContentLoaded", () => {
   loadSection("/sections/home.html");
 });
+
+// Existing loadSection function...
+
+document.getElementById("toggleSidebar").addEventListener("click", () => {
+  document.getElementById("sidebar").classList.toggle("closed");
+});
