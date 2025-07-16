@@ -28,6 +28,11 @@ function toggleSidebar() {
   }
 }
 
+// Load default content on initial page load
+window.addEventListener("DOMContentLoaded", () => {
+  loadSection("/sections/home.html");
+});
+
 // On load, initialize state
 window.addEventListener("load", () => {
   if (window.innerWidth >= 768) {
@@ -88,8 +93,3 @@ function loadSection(file) {
       ).innerHTML = `<p style="color:red;">${error.message}</p>`;
     });
 }
-
-// Load default content on initial page load
-window.addEventListener("DOMContentLoaded", () => {
-  loadSection("/sections/home.html");
-});
