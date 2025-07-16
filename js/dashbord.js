@@ -23,5 +23,15 @@ window.addEventListener("DOMContentLoaded", () => {
 // Existing loadSection function...
 
 document.getElementById("toggleSidebar").addEventListener("click", () => {
-  document.getElementById("sidebar").classList.toggle("closed");
+  const sidebar = document.getElementById("sidebar");
+  const toggleBtn = document.getElementById("toggleSidebar");
+
+  sidebar.classList.toggle("closed");
+
+  // Change icon based on sidebar state
+  if (sidebar.classList.contains("closed")) {
+    toggleBtn.textContent = "☰"; // Menu icon
+  } else {
+    toggleBtn.textContent = "←"; // Arrow icon
+  }
 });
