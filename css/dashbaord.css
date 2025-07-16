@@ -94,15 +94,27 @@ main p {
 /* Add this at the end of your CSS file */
 
 #sidebar {
-  transition: transform 0.3s ease;
+  margin-top: 8vh; /* 10% from top */
+  background: #2c3e50;
+  width: 15%;
+  height: 100vh; /* 80% of viewport height */
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.5s ease;
+
+  gap: 15px;
 }
 
 #sidebar.closed {
   transform: translateX(-100%);
   position: absolute;
-  left: 0;
   top: 0;
-  height: 100%;
+  left: 0;
+  height: 80vh; /* match height */
   z-index: 999;
 }
 
