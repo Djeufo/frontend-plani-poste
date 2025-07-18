@@ -1,71 +1,149 @@
-let sortDirection = {};
+const posts = [
+  {
+    title: "Post A",
+    status: "scheduled",
+    likes: 100,
+    comments: 20,
+    shares: 15,
+    engagement: 0.45,
+    date: "2024-01-01",
+  },
+  {
+    title: "Post B",
+    status: "published",
+    likes: 50,
+    comments: 10,
+    shares: 5,
+    engagement: 0.3,
+    date: "2024-02-15",
+  },
+  {
+    title: "Post C",
+    status: "draft",
+    likes: 200,
+    comments: 50,
+    shares: 40,
+    engagement: 0.8,
+    date: "2024-03-10",
+  },
+  {
+    title: "Post D",
+    status: "published",
+    likes: 75,
+    comments: 25,
+    shares: 10,
+    engagement: 0.6,
+    date: "2024-03-20",
+  },
+  {
+    title: "Post E",
+    status: "scheduled",
+    likes: 90,
+    comments: 30,
+    shares: 22,
+    engagement: 0.55,
+    date: "2024-04-05",
+  },
+  {
+    title: "Post F",
+    status: "draft",
+    likes: 30,
+    comments: 5,
+    shares: 3,
+    engagement: 0.15,
+    date: "2024-04-22",
+  },
+  {
+    title: "Post G",
+    status: "published",
+    likes: 180,
+    comments: 40,
+    shares: 20,
+    engagement: 0.75,
+    date: "2024-05-10",
+  },
+  {
+    title: "Post H",
+    status: "scheduled",
+    likes: 60,
+    comments: 12,
+    shares: 8,
+    engagement: 0.35,
+    date: "2024-06-01",
+  },
+  {
+    title: "Post I",
+    status: "draft",
+    likes: 110,
+    comments: 22,
+    shares: 18,
+    engagement: 0.5,
+    date: "2024-06-15",
+  },
+  {
+    title: "Post J",
+    status: "published",
+    likes: 95,
+    comments: 28,
+    shares: 17,
+    engagement: 0.68,
+    date: "2024-07-01",
+  },
+];
+function renderPosts(postsList) {
+  const container = document.getElementById("postCards");
+  container.innerHTML = ""; // clear previous
 
-function sortTable(column) {
-  const table = document.getElementById("postTable");
-  const tbody = table.tBodies[0];
-  const rows = Array.from(tbody.rows);
+  postsList.forEach((post) => {
+    const card = document.createElement("div");
+    card.className = `post-card`;
+    card.dataset.title = post.title.toLowerCase();
+    card.dataset.status = post.status.toLowerCase();
+    card.dataset.likes = post.likes;
+    card.dataset.date = post.date;
 
-  const columnIndex = {
-    title: 0,
-    status: 1,
-    likes: 2,
-    comments: 3,
-    shares: 4,
-    avgEngagement: 5,
-    publishedDate: 6,
-  }[column];
+    card.innerHTML = `
+          <div class="status ${post.status.toLowerCase()}">${post.status}</div>
+          <h3>${post.title}</h3>
+          <div class="metrics">
+            <span>Likes: ${post.likes}</span>
+            <span>Comments: ${post.comments}</span>
+            <span>Shares: ${post.shares}</span>
+            <span>Engagement: ${post.engagement}</span>
+            <span>Date: ${post.date}</span>
+          </div>
+        `;
 
-  const direction = (sortDirection[column] = !sortDirection[column]);
-
-  rows.sort((a, b) => {
-    let cellA = a.cells[columnIndex].innerText.trim().toLowerCase();
-    let cellB = b.cells[columnIndex].innerText.trim().toLowerCase();
-
-    if (["likes", "comments", "shares"].includes(column)) {
-      cellA = parseInt(cellA);
-      cellB = parseInt(cellB);
-    } else if (column === "avgEngagement") {
-      cellA = parseFloat(cellA);
-      cellB = parseFloat(cellB);
-    } else if (column === "publishedDate") {
-      cellA = new Date(cellA);
-      cellB = new Date(cellB);
-    } else if (column === "status") {
-      const statusOrder = { draft: 1, scheduled: 2, published: 3 };
-      cellA = statusOrder[cellA] || 0;
-      cellB = statusOrder[cellB] || 0;
-    }
-
-    return direction ? (cellA > cellB ? 1 : -1) : (cellA < cellB ? 1 : -1);
+    container.appendChild(card);
   });
-
-  rows.forEach((row) => tbody.appendChild(row)); // re-add sorted rows
 }
 
-function filterTable() {
-  const filterTitle = document.getElementById("filterTitle").value.toLowerCase();
-  const filterStatus = document.getElementById("filterStatus").value.toLowerCase();
-  const filterLikes = document.getElementById("filterLikes").value;
-  const filterComments = document.getElementById("filterComments").value;
-  const filterShares = document.getElementById("filterShares").value;
-  const filterEngagement = document.getElementById("filterEngagement").value;
-  const filterDate = document.getElementById("filterDate").value.toLowerCase();
+function filterCards() {
+  const titleFilter = document
+    .getElementById("filterTitle")
+    .value.toLowerCase();
+  const statusFilter = document
+    .getElementById("filterStatus")
+    .value.toLowerCase();
+  const likesFilter =
+    parseInt(document.getElementById("filterLikes").value) || 0;
+  const dateFilter = document.getElementById("filterDate").value;
 
-  const rows = document.querySelectorAll("#tableBody tr");
-
-  rows.forEach((row) => {
-    const cells = row.cells;
-
-    const match =
-      cells[0].innerText.toLowerCase().includes(filterTitle) &&
-      cells[1].innerText.toLowerCase().includes(filterStatus) &&
-      cells[2].innerText.includes(filterLikes) &&
-      cells[3].innerText.includes(filterComments) &&
-      cells[4].innerText.includes(filterShares) &&
-      cells[5].innerText.includes(filterEngagement) &&
-      cells[6].innerText.toLowerCase().includes(filterDate);
-
-    row.style.display = match ? "" : "none";
+  const filtered = posts.filter((post) => {
+    return (
+      post.title.toLowerCase().includes(titleFilter) &&
+      (statusFilter === "" || post.status.toLowerCase() === statusFilter) &&
+      post.likes >= likesFilter &&
+      (dateFilter === "" || post.date === dateFilter)
+    );
   });
+
+  // Sort filtered posts by descending date
+  filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  renderPosts(filtered);
 }
 
+window.onload = function () {
+  renderPosts([...posts].sort((a, b) => new Date(b.date) - new Date(a.date)));
+};
