@@ -11,6 +11,20 @@
     <link rel="stylesheet" href="/css/socialMedia.css" />
   </head>
   <body>
+    <!-- Blue Header -->
+    <header class="custom-header">
+      <div class="header-inner">
+        <img src="/images/logo.png" alt="Logo" class="header-logo" />
+        <h1 class="welcome-message">Welcome to the Dashboard</h1>
+        <div id="language-container" class="sidebar-language">
+          <label for="language-select"></label>
+          <select id="language-select" onchange="changeLanguage(this)">
+            <!-- Options added by JavaScript -->
+          </select>
+        </div>
+      </div>
+    </header>
+
     <!-- ☰ Menu Button -->
     <button id="menuBtn" class="toggle-open-btn" onclick="toggleSidebar()">
       ☰
@@ -33,5 +47,6 @@
     <script src="/js/dashbord.js"></script>
     <script src="/js/posts.js"></script>
     <script src="/js/socialMedia.js"></script>
+    <script src="/js/languages.js"></script>
   </body>
 </html>
