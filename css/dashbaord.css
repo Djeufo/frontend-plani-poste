@@ -120,14 +120,17 @@ body {
   background-color: #ffffff;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
-  transition: margin-left 0.4s;
+  transition: margin-left 0.5s;
   margin-left: auto;
   margin-right: auto;
-  width: 90%;
+  width: 86%;
+  overflow-x: auto; /* ✅ allows horizontal scroll */
+  /*overflow-y: auto; /* optional: if vertical scroll needed */
 }
 
 .main-content.shift {
   margin-left: 250px;
+  width: 86%;
 }
 
 @media (max-width: 768px) {
@@ -135,6 +138,7 @@ body {
     width: 95%;
     margin-top: 100px;
     margin-left: auto;
+    width: 86%;
   }
 }
 
