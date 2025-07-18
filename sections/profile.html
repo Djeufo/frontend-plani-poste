@@ -1,2 +1,85 @@
-<h2>Profile</h2>
-<p>This is the content of Section 2.</p>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/css/profile.css" />
+  </head>
+  <body>
+    <h2 id="profileHeaderText">Profile</h2>
+    <div class="profile-card">
+      <img
+        id="profileImage"
+        alt="Profile Photo"
+        src="/img/logo.png"
+        width="100"
+      />
+      <table class="profile-table">
+        <tr>
+          <th>Username</th>
+          <td>
+            <div class="profile-field">
+              <span id="usernameDisplay">johndoe</span>
+              <button class="update-btn" onclick="openEditModal('username')">
+                Update
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th>Name</th>
+          <td>
+            <div class="profile-field">
+              <span id="nameDisplay">John Doe</span>
+              <button class="update-btn" onclick="openEditModal('name')">
+                Update
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th>Email</th>
+          <td>john@example.com</td>
+        </tr>
+        <tr>
+          <th>Provider</th>
+          <td>Google</td>
+        </tr>
+        <tr>
+          <th>UUID</th>
+          <td>123e4567-e89b-12d3-a456-426614174000</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Hidden Fields -->
+    <input
+      type="hidden"
+      id="userUuid"
+      value="123e4567-e89b-12d3-a456-426614174000"
+    />
+    <input type="hidden" id="userEmail" value="john@example.com" />
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeEditModal()">&times;</span>
+        <h3 id="modalTitle">Edit Field</h3>
+        <form id="editForm">
+          <label id="modalLabel" for="modalInput">Field Label</label>
+          <input type="text" id="modalInput" />
+          <button type="button" onclick="submitEdit()">Save</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Success Popup -->
+    <div id="successModal" class="modal">
+      <div class="modal-content success">
+        <span class="close" onclick="closeSuccessModal()">&times;</span>
+        <p id="successMessage">Profile updated successfully.</p>
+      </div>
+    </div>
+
+    <script src="/js/profile.js"></script>
+  </body>
+</html>
