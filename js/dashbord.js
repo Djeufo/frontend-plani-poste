@@ -73,7 +73,7 @@ document.getElementById("toggleSidebar").addEventListener("click", () => {
   if (sidebar.classList.contains("closed")) {
     toggleBtn.textContent = "☰"; // Menu icon
   } else {
-    toggleBtn.textContent = "←"; // Arrow icon
+    toggleBtn.textContent = "<"; // Arrow icon
   }
 });
 

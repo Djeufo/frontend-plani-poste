@@ -1,106 +1,126 @@
-<h2>Posts History</h2>
-<p>This is the content of Section 3.</p>
+<!DOCTYPE html>
+<html lang="en">
+  <head> </head>
+  <body>
+    <h2>Posts History</h2>
+    <p>This is the content of Section 3.</p>
 
-<div class="table-container">
-  <table id="postTable">
-    <thead>
-      <tr>
-        <th onclick="sortTable('title')">
-          Title <span class="arrow" id="titleArrow">▼</span>
-        </th>
-        <th onclick="sortTable('likes')">
-          Likes <span class="arrow" id="likesArrow">▼</span>
-        </th>
-        <th onclick="sortTable('comments')">
-          Comments <span class="arrow" id="commentsArrow">▼</span>
-        </th>
-        <th onclick="sortTable('shares')">
-          Shares <span class="arrow" id="sharesArrow">▼</span>
-        </th>
-        <th onclick="sortTable('avgEngagement')">
-          Engagement <span class="arrow" id="avgEngagementArrow">▼</span>
-        </th>
-        <th onclick="sortTable('publishedDate')">
-          Published Date <span class="arrow" id="dateArrow">▼</span>
-        </th>
-      </tr>
-      <tr class="filter-row">
-        <th>
-          <input
-            type="text"
-            oninput="filterTable()"
-            id="filterTitle"
-            placeholder="Filter Title"
-          />
-        </th>
-        <th>
-          <input
-            type="text"
-            oninput="filterTable()"
-            id="filterLikes"
-            placeholder="Filter Likes"
-          />
-        </th>
-        <th>
-          <input
-            type="text"
-            oninput="filterTable()"
-            id="filterComments"
-            placeholder="Filter Comments"
-          />
-        </th>
-        <th>
-          <input
-            type="text"
-            oninput="filterTable()"
-            id="filterShares"
-            placeholder="Filter Shares"
-          />
-        </th>
-        <th>
-          <input
-            type="text"
-            oninput="filterTable()"
-            id="filterEngagement"
-            placeholder="Filter Engagement"
-          />
-        </th>
-        <th>
-          <input
-            type="text"
-            oninput="filterTable()"
-            id="filterDate"
-            placeholder="Filter Date"
-          />
-        </th>
-      </tr>
-    </thead>
-    <tbody id="tableBody">
-      <!-- Sample static rows -->
-      <tr>
-        <td data-label="Title">Post A</td>
-        <td data-label="Likes">100</td>
-        <td data-label="Comments">20</td>
-        <td data-label="Shares">15</td>
-        <td data-label="Avg. Engagement">0.45</td>
-        <td data-label="Published Date">2024-01-01</td>
-      </tr>
-      <tr>
-        <td data-label="Title">Post B</td>
-        <td data-label="Likes">50</td>
-        <td data-label="Comments">10</td>
-        <td data-label="Shares">5</td>
-        <td data-label="Avg. Engagement">0.30</td>
-        <td data-label="Published Date">2024-02-15</td>
-      </tr>
-      <tr>
-        <td data-label="Title">Post C</td>
-        <td data-label="Likes">200</td>
-        <td data-label="Comments">50</td>
-        <td data-label="Shares">40</td>
-        <td data-label="Avg. Engagement">0.80</td>
-        <td data-label="Published Date">2024-03-10</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+    <div class="table-container">
+      <table id="postTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable('title')">
+              Title <span class="arrow" id="titleArrow">▼</span>
+            </th>
+            <th onclick="sortTable('status')">
+              Status <span class="arrow" id="statusArrow">▼</span>
+            </th>
+            <th onclick="sortTable('likes')">
+              Likes <span class="arrow" id="likesArrow">▼</span>
+            </th>
+            <th onclick="sortTable('comments')">
+              Comments <span class="arrow" id="commentsArrow">▼</span>
+            </th>
+            <th onclick="sortTable('shares')">
+              Shares <span class="arrow" id="sharesArrow">▼</span>
+            </th>
+            <th onclick="sortTable('avgEngagement')">
+              Engagement <span class="arrow" id="avgEngagementArrow">▼</span>
+            </th>
+            <th onclick="sortTable('publishedDate')">
+              Published Date <span class="arrow" id="dateArrow">▼</span>
+            </th>
+          </tr>
+          <tr class="filter-row">
+            <th>
+              <input
+                type="text"
+                oninput="filterTable()"
+                id="filterTitle"
+                placeholder="Filter Title"
+              />
+            </th>
+            <th>
+              <select id="filterStatus" onchange="filterTable()">
+                <option value="">All</option>
+                <option value="draft">Draft</option>
+                <option value="scheduled">Scheduled</option>
+                <option value="published">Published</option>
+              </select>
+            </th>
+            <th>
+              <input
+                type="text"
+                oninput="filterTable()"
+                id="filterLikes"
+                placeholder="Filter Likes"
+              />
+            </th>
+            <th>
+              <input
+                type="text"
+                oninput="filterTable()"
+                id="filterComments"
+                placeholder="Filter Comments"
+              />
+            </th>
+            <th>
+              <input
+                type="text"
+                oninput="filterTable()"
+                id="filterShares"
+                placeholder="Filter Shares"
+              />
+            </th>
+            <th>
+              <input
+                type="text"
+                oninput="filterTable()"
+                id="filterEngagement"
+                placeholder="Filter Engagement"
+              />
+            </th>
+            <th>
+              <input
+                type="text"
+                oninput="filterTable()"
+                id="filterDate"
+                placeholder="Filter Date"
+              />
+            </th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <!-- Sample static rows -->
+          <tr>
+            <td data-label="Title">Post A</td>
+            <td data-label="Status">Scheduled</td>
+            <td data-label="Likes">100</td>
+            <td data-label="Comments">20</td>
+            <td data-label="Shares">15</td>
+            <td data-label="Avg. Engagement">0.45</td>
+            <td data-label="Published Date">2024-01-01</td>
+          </tr>
+          <tr>
+            <td data-label="Title">Post B</td>
+            <td data-label="Status">Published</td>
+            <td data-label="Likes">50</td>
+            <td data-label="Comments">10</td>
+            <td data-label="Shares">5</td>
+            <td data-label="Avg. Engagement">0.30</td>
+            <td data-label="Published Date">2024-02-15</td>
+          </tr>
+          <tr>
+            <td data-label="Title">Post C</td>
+            <td data-label="Status">Draft</td>
+            <td data-label="Likes">200</td>
+            <td data-label="Comments">50</td>
+            <td data-label="Shares">40</td>
+            <td data-label="Avg. Engagement">0.80</td>
+            <td data-label="Published Date">2024-03-10</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
