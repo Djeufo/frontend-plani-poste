@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weekly Scheduler with Navigation</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      integrity="sha512-dP2T9iGgEcEwU+VHQ1BaYntStkWD9+L1Ao6xBDM7gx9ZsQowB41kHwHeZ5uP6M1dDGP5+K+Kg7q+g6xJP4LalQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="css/dashbaord.css" />
+    <link rel="stylesheet" href="css/home.css" />
+    <link rel="stylesheet" href="css/posts.css" />
+    <link rel="stylesheet" href="css/socialMedia.css" />
+    <link rel="stylesheet" href="css/calendar.css" />
+    <script src="/js/calendar.js"></script>
+  </head>
+  <body>
+    <!-- Blue Header -->
+    <header class="custom-header">
+      <div class="header-inner">
+        <button class="toggle-open-btn" id="toggleBtn">&#9664;</button>
+        &nbsp;
+        <img src="img/logo.png" alt="Logo" class="header-logo" />
+        <h1 class="welcome-message">Welcome</h1>
+        <div id="language-container" class="sidebar-language">
+          <label for="language-select"></label>
+          <select id="language-select" onchange="changeLanguage(this)">
+            <!-- Options added by JavaScript -->
+          </select>
+        </div>
+      </div>
+    </header>
+
+    <!-- ☰ Menu Button -->
+    <button id="menuBtn" class="toggle-open-btn" onclick="toggleSidebar()">
+      ☰
+      <!--Menu-->
+    </button>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+      <button class="toggle-close-btn" onclick="toggleSidebar()">←</button>
+      <a style="background-color: transparent"></a>
+      <a style="background-color: transparent"></a>
+      <a style="background-color: transparent"></a>
+      <a onclick="loadSection('sections/home.html')">Home</a>
+      <a onclick="loadSection('sections/profile.html')">Profile</a>
+      <a onclick="loadSection('sections/posts.html')">Posts History</a>
+      <a onclick="loadSection('sections/socialMedia.html')"> Social Media</a>
+      <a onclick="loadSection('sections/calendar.html')">Calendar</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="main">
+      <main id="content">
+        <section id="home" class="section">
+          <h2>Home</h2>
+          <p>Welcome to the home page.</p>
+        </section>
+
+        <section id="profile" class="section" style="display: none">
+          <h2>Profile</h2>
+          <p>Your profile information goes here.</p>
+        </section>
+
+        <section id="posts" class="section" style="display: none">
+          <h2>Posts History</h2>
+          <p>Your posts appear here.</p>
+        </section>
+
+        <section id="socialMedia" class="section" style="display: none">
+          <h2>Social Media</h2>
+          <p>Your social feeds here.</p>
+        </section>
+
+        <section id="calendar" class="section" style="display: none">
+          <h2>Calendar</h2>
+          <p>Your schedule here.</p>
+        </section>
+      </main>
+    </div>
+
+    <script src="js/dashbord.js"></script>
+    <script src="js/posts.js"></script>
+    <script src="js/socialMedia.js"></script>
+    <script src="js/languages.js"></script>
+    <script src="js/profile.js"></script>
+    <script src="js/calendar.js"></script>
+  </body>
+</html>

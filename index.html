@@ -2,69 +2,613 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Weekly Scheduler with Navigation</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-      integrity="sha512-dP2T9iGgEcEwU+VHQ1BaYntStkWD9+L1Ao6xBDM7gx9ZsQowB41kHwHeZ5uP6M1dDGP5+K+Kg7q+g6xJP4LalQ=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="/css/dashbaord.css" />
-    <link rel="stylesheet" href="/css/home.css" />
-    <link rel="stylesheet" href="/css/posts.css" />
-    <link rel="stylesheet" href="/css/socialMedia.css" />
-    <link rel="stylesheet" href="/css/calendar.css" />
-    <script src="/js/calendar.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Social Media Dashboard</title>
+    <style>
+      /* Reset & base */
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f0f4f9;
+        color: #333;
+        overflow-x: hidden;
+      }
+
+      /* Layout */
+      .container {
+        display: flex;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      /* Sidebar */
+      .sidebar {
+        background: #054a91;
+        color: white;
+        width: 250px;
+        display: flex;
+        flex-direction: column;
+        padding: 1.5rem 1rem;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        transition: transform 0.3s ease;
+        z-index: 1100;
+        will-change: transform;
+      }
+
+      .sidebar.closed {
+        transform: translateX(-100%);
+      }
+
+      .sidebar h2 {
+        margin: 0 0 2rem 0;
+        font-weight: 700;
+        font-size: 1.8rem;
+        letter-spacing: 2px;
+        user-select: none;
+        text-align: center;
+      }
+
+      .nav-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        flex-grow: 1;
+      }
+
+      .nav-links li {
+        margin-bottom: 1.5rem;
+      }
+
+      .nav-links a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: white;
+        font-weight: 600;
+        font-size: 1.1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        transition: background 0.3s ease;
+      }
+
+      .nav-links a:hover,
+      .nav-links a.active {
+        background: #0a72e8;
+        box-shadow: 0 2px 8px rgb(10 114 232 / 0.4);
+      }
+
+      .nav-links svg {
+        margin-right: 12px;
+        width: 20px;
+        height: 20px;
+        fill: white;
+        flex-shrink: 0;
+      }
+
+      /* Overlay for mobile sidebar */
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.3);
+        z-index: 1050;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+      .overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      /* Main content */
+      .main-content {
+        margin-left: 250px;
+        padding: 2rem;
+        flex-grow: 1;
+        max-width: calc(100% - 250px);
+        transition: margin-left 0.3s ease;
+      }
+
+      /* Navbar */
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        position: relative;
+      }
+
+      /* Hamburger toggle button */
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 28px;
+        height: 22px;
+        cursor: pointer;
+        margin-right: 1rem;
+      }
+
+      .hamburger div {
+        width: 100%;
+        height: 3px;
+        background: #0a72e8;
+        border-radius: 3px;
+        transition: all 0.3s ease;
+      }
+
+      /* Hamburger active animation */
+      .hamburger.active div:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+      .hamburger.active div:nth-child(2) {
+        opacity: 0;
+      }
+      .hamburger.active div:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+      }
+
+      .search-bar {
+        flex-grow: 1;
+        max-width: 400px;
+        position: relative;
+      }
+
+      .search-bar input {
+        width: 100%;
+        padding: 0.6rem 2.5rem 0.6rem 1rem;
+        border-radius: 25px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+      }
+
+      .search-bar input:focus {
+        outline: none;
+        border-color: #0a72e8;
+        box-shadow: 0 0 8px rgb(10 114 232 / 0.5);
+      }
+
+      .search-bar svg {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 20px;
+        height: 20px;
+        fill: #0a72e8;
+        pointer-events: none;
+      }
+
+      .profile {
+        margin-left: 1.5rem;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+
+      .profile img {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        border: 2px solid #0a72e8;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+
+      .profile img:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 12px #0a72e8;
+      }
+
+      /* Posts grid */
+      .posts {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.8rem;
+      }
+
+      .post-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgb(0 0 0 / 0.1);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        transition: box-shadow 0.3s ease;
+      }
+
+      .post-card:hover {
+        box-shadow: 0 6px 20px rgb(10 114 232 / 0.25);
+      }
+
+      .post-header {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        border-bottom: 1px solid #eee;
+      }
+
+      .post-header img {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 1rem;
+        border: 2px solid #0a72e8;
+      }
+
+      .post-user {
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: #054a91;
+      }
+
+      .post-date {
+        font-size: 0.85rem;
+        color: #777;
+        margin-left: auto;
+      }
+
+      .post-content {
+        padding: 1rem;
+        font-size: 1rem;
+        color: #333;
+        flex-grow: 1;
+      }
+
+      .post-image {
+        max-height: 280px;
+        object-fit: cover;
+        width: 100%;
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+      }
+
+      .post-actions {
+        display: flex;
+        padding: 0.8rem 1rem;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .btn {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: #0a72e8;
+        font-weight: 600;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: color 0.3s ease;
+        user-select: none;
+      }
+
+      .btn:hover {
+        color: #054a91;
+      }
+
+      .btn svg {
+        width: 20px;
+        height: 20px;
+        fill: currentColor;
+        transition: transform 0.3s ease;
+      }
+
+      .btn.liked svg {
+        fill: #e0245e;
+        transform: scale(1.1);
+      }
+
+      /* Responsive */
+      @media (max-width: 991px) {
+        .main-content {
+          margin-left: 0;
+          max-width: 100%;
+          padding: 1.5rem 1rem 2rem 1rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        /* Hide sidebar by default */
+        .sidebar {
+          transform: translateX(-100%);
+          width: 250px;
+        }
+
+        /* Show sidebar when open */
+        .sidebar.open {
+          transform: translateX(0);
+          box-shadow: 2px 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Show hamburger */
+        .hamburger {
+          display: flex;
+        }
+      }
+
+      @media (max-width: 400px) {
+        .posts {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
   </head>
   <body>
-    <!-- Blue Header -->
-    <header class="custom-header">
-      <div class="header-inner">
-        <button class="toggle-open-btn" id="toggleBtn">&#9664;</button>
-        &nbsp;
-        <img src="/img/logo.png" alt="Logo" class="header-logo" />
-        <h1 class="welcome-message">Welcome</h1>
-        <div id="language-container" class="sidebar-language">
-          <label for="language-select"></label>
-          <select id="language-select" onchange="changeLanguage(this)">
-            <!-- Options added by JavaScript -->
-          </select>
+    <div class="container">
+      <nav class="sidebar closed" id="sidebar">
+        <h2>Dashboard</h2>
+        <ul class="nav-links">
+          <li>
+            <a href="#" class="active" title="Dashboard">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8v-10h-8v10zm0-18v6h8V3h-8z"
+                />
+              </svg>
+              <span>Dashboard</span></a
+            >
+          </li>
+          <li>
+            <a href="#" title="Posts">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M19 3H5c-1.1 0-2 .9-2 2v14l7-3 7 3V5c0-1.1-.9-2-2-2z"
+                />
+              </svg>
+              <span>Posts</span></a
+            >
+          </li>
+          <li>
+            <a href="#" title="Analytics">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M3 17h2v-7H3v7zm4 0h2v-4H7v4zm4 0h2v-10h-2v10zm4 0h2v-2h-2v2zm4 0h2v-13h-2v13z"
+                />
+              </svg>
+              <span>Analytics</span></a
+            >
+          </li>
+          <li>
+            <a href="#" title="Settings">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M19.14 12.936c.036-.3.057-.61.057-.936s-.02-.637-.057-.936l2.11-1.65a.5.5 0 000-.756l-2-2a.5.5 0 00-.756 0l-1.65 2.11c-.3-.036-.61-.057-.936-.057s-.637.02-.936.057L13.935 7.9a.5.5 0 00-.756 0l-2 2a.5.5 0 000 .756l2.11 1.65c-.036.3-.057.61-.057.936s.02.637.057.936l-2.11 1.65a.5.5 0 000 .756l2 2a.5.5 0 00.756 0l1.65-2.11c.3.036.61.057.936.057s.637-.02.936-.057l1.65 2.11a.5.5 0 00.756 0l2-2a.5.5 0 000-.756l-2.11-1.65zM12 15.5A3.5 3.5 0 1115.5 12 3.5 3.5 0 0112 15.5z"
+                />
+              </svg>
+              <span>⚙️ Settings</span></a
+            >
+          </li>
+        </ul>
+      </nav>
+
+      <div class="overlay" id="overlay"></div>
+
+      <main class="main-content">
+        <header class="navbar">
+          <div
+            class="hamburger"
+            id="hamburger"
+            aria-label="Toggle menu"
+            role="button"
+            tabindex="0"
+          >
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+          <div class="search-bar">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search posts..."
+              aria-label="Search posts"
+            />
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zM9.5 14c-2.48 0-4.5-2.02-4.5-4.5S7.02 5 9.5 5 14 7.02 14 9.5 11.98 14 9.5 14z"
+              />
+            </svg>
+          </div>
+          <div class="profile" tabindex="0" aria-label="User profile">
+            <img
+              src="https://randomuser.me/api/portraits/men/34.jpg"
+              alt="User profile photo"
+            />
+          </div>
+        </header>
+
+        <section class="posts" id="posts"></section>
+      </main>
+    </div>
+
+    <script>
+      const postsData = [
+        {
+          id: 1,
+          user: "John Doe",
+          userImg: "https://randomuser.me/api/portraits/men/1.jpg",
+          date: "2025-07-18",
+          content:
+            "Just finished my morning run! Feeling energized and ready to take on the day.",
+          image:
+            "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80",
+          liked: false,
+        },
+        {
+          id: 2,
+          user: "Jane Smith",
+          userImg: "https://randomuser.me/api/portraits/women/2.jpg",
+          date: "2025-07-17",
+          content:
+            "Loving this new recipe I tried out today. Healthy and delicious!",
+          image:
+            "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=600&q=80",
+          liked: false,
+        },
+        {
+          id: 3,
+          user: "Alex Johnson",
+          userImg: "https://randomuser.me/api/portraits/men/3.jpg",
+          date: "2025-07-16",
+          content:
+            "Excited about my upcoming trip to the mountains. Nature, here I come!",
+          image:
+            "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=600&q=80",
+          liked: false,
+        },
+      ];
+
+      const postsContainer = document.getElementById("posts");
+      const searchInput = document.getElementById("searchInput");
+
+      // Render posts
+      function renderPosts(posts) {
+        postsContainer.innerHTML = "";
+        if (posts.length === 0) {
+          postsContainer.innerHTML =
+            '<p style="text-align:center; color:#666; font-size:1.2rem;">No posts found.</p>';
+          return;
+        }
+        posts.forEach((post) => {
+          const postCard = document.createElement("article");
+          postCard.className = "post-card";
+          postCard.innerHTML = `
+        <div class="post-header">
+          <img src="${post.userImg}" alt="${post.user} profile photo" />
+          <div class="post-user">${post.user}</div>
+          <div class="post-date">${new Date(
+            post.date
+          ).toLocaleDateString()}</div>
         </div>
-      </div>
-    </header>
+        <div class="post-content">${post.content}</div>
+        ${
+          post.image
+            ? `<img class="post-image" src="${post.image}" alt="Post image" />`
+            : ""
+        }
+        <div class="post-actions">
+          <button class="btn like-btn ${
+            post.liked ? "liked" : ""
+          }" aria-pressed="${post.liked}" aria-label="Like post by ${
+            post.user
+          }" data-id="${post.id}">
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6.42 3.42 5 5.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5 18.58 5 20 6.42 20 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            Like
+          </button>
+          <button class="btn share-btn" aria-label="Share post by ${
+            post.user
+          }" data-id="${post.id}">
+            <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a2.6 2.6 0 000-1.39L16 7.13a2.5 2.5 0 101.92 1.85zm-6-9.75a2.5 2.5 0 11-2.5 2.5 2.5 2.5 0 012.5-2.5z"/></svg>
+            Share
+          </button>
+        </div>
+      `;
+          postsContainer.appendChild(postCard);
+        });
 
-    <!-- ☰ Menu Button -->
-    <button id="menuBtn" class="toggle-open-btn" onclick="toggleSidebar()">
-      ☰
-      <!--Menu-->
-    </button>
+        // Add event listeners for like buttons
+        document.querySelectorAll(".like-btn").forEach((btn) => {
+          btn.onclick = () => {
+            const postId = +btn.dataset.id;
+            const post = postsData.find((p) => p.id === postId);
+            if (post) {
+              post.liked = !post.liked;
+              renderPosts(postsData);
+            }
+          };
+        });
 
-    <!-- Sidebar -->
-    <div id="sidebar" class="sidebar">
-      <button class="toggle-close-btn" onclick="toggleSidebar()">←</button>
-      <a style="background-color: transparent"></a>
-      <a style="background-color: transparent"></a>
-      <a style="background-color: transparent"></a>
-      <a onclick="loadSection('/sections/home.html')">Home</a>
-      <a onclick="loadSection('/sections/profile.html')">Profile</a>
-      <a onclick="loadSection('/sections/posts.html')">Posts History</a>
-      <a onclick="loadSection('/sections/socialMedia.html')"> Social Media</a>
-      <a onclick="loadSection('/sections/calendar.html')">Calendar</a>
-    </div>
+        // Add event listeners for share buttons
+        document.querySelectorAll(".share-btn").forEach((btn) => {
+          btn.onclick = () => {
+            const postId = +btn.dataset.id;
+            const post = postsData.find((p) => p.id === postId);
+            if (post) {
+              alert(
+                `Sharing post by ${post.user}:\n"${post.content.substring(
+                  0,
+                  40
+                )}..."`
+              );
+            }
+          };
+        });
+      }
 
-    <!-- Main Content -->
-    <div class="main-content" id="main">
-      <main id="content"></main>
-    </div>
+      renderPosts(postsData);
 
-    <script src="/js/dashbord.js"></script>
-    <script src="/js/posts.js"></script>
-    <script src="/js/socialMedia.js"></script>
-    <script src="/js/languages.js"></script>
-    <script src="/js/profile.js"></script>
-    <script src="/js/calendar.js"></script>
+      // Search filter
+      searchInput.addEventListener("input", () => {
+        const query = searchInput.value.toLowerCase();
+        const filtered = postsData.filter(
+          (post) =>
+            post.user.toLowerCase().includes(query) ||
+            post.content.toLowerCase().includes(query)
+        );
+        renderPosts(filtered);
+      });
+
+      // Sidebar toggle logic
+      const sidebar = document.getElementById("sidebar");
+      const hamburger = document.getElementById("hamburger");
+      const overlay = document.getElementById("overlay");
+
+      function openSidebar() {
+        sidebar.classList.remove("closed");
+        sidebar.classList.add("open");
+        overlay.classList.add("active");
+        hamburger.classList.add("active");
+        document.body.style.overflow = "hidden"; // prevent scroll when sidebar open on mobile
+      }
+
+      function closeSidebar() {
+        sidebar.classList.add("closed");
+        sidebar.classList.remove("open");
+        overlay.classList.remove("active");
+        hamburger.classList.remove("active");
+        document.body.style.overflow = ""; // restore scroll
+      }
+
+      hamburger.addEventListener("click", () => {
+        if (sidebar.classList.contains("open")) {
+          closeSidebar();
+        } else {
+          openSidebar();
+        }
+      });
+
+      overlay.addEventListener("click", () => {
+        closeSidebar();
+      });
+
+      // Optional: close sidebar on Escape key
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && sidebar.classList.contains("open")) {
+          closeSidebar();
+        }
+      });
+
+      // On window resize, if wider than mobile breakpoint, reset sidebar styles
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 768) {
+          sidebar.classList.remove("closed", "open");
+          overlay.classList.remove("active");
+          hamburger.classList.remove("active");
+          document.body.style.overflow = "";
+        }
+      });
+    </script>
   </body>
 </html>

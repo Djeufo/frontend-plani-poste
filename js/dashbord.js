@@ -77,19 +77,20 @@ document.getElementById("toggleSidebar").addEventListener("click", () => {
   }
 });
 
-function loadSection(file) {
-  fetch(file)
-    .then((response) => {
-      if (!response.ok)
-        throw new Error("HTTP " + response.status + ": " + file);
-      return response.text();
-    })
-    .then((html) => {
-      document.getElementById("content").innerHTML = html;
-    })
-    .catch((error) => {
-      document.getElementById(
-        "content"
-      ).innerHTML = `<p style="color:red;">${error.message}</p>`;
-    });
+function showSection(sectionId) {
+  // Hide all sections
+  document.querySelectorAll("main#content section").forEach((section) => {
+    section.style.display = "none";
+  });
+
+  // Show the selected section
+  const selected = document.getElementById(sectionId);
+  if (selected) {
+    selected.style.display = "block";
+  }
 }
+
+// Show Home by default on page load
+window.addEventListener("DOMContentLoaded", () => {
+  showSection("home");
+});
