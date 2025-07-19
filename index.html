@@ -13,14 +13,11 @@
     <link rel="stylesheet" href="css/index.css" />
   </head>
   <body>
-    <!--MAIN CONTENT DIV-->
     <div class="container">
-      <!--SIDE BAR NAV-->
       <nav class="sidebar" id="sidebar">
         <h2>DJEUFO</h2>
         <ul class="nav-links">
           <li>
-            <!-- Added data-target to link to the content section ID -->
             <a
               href="#dashboard"
               class="active"
@@ -36,7 +33,6 @@
             >
           </li>
           <li>
-            <!-- Added data-target to link to the content section ID -->
             <a href="#posts" title="Posts" data-target="posts-section">
               <svg viewBox="0 0 24 24">
                 <path
@@ -47,7 +43,6 @@
             >
           </li>
           <li>
-            <!-- Added data-target to link to the content section ID -->
             <a
               href="#analytics"
               title="Analytics"
@@ -62,7 +57,6 @@
             >
           </li>
           <li>
-            <!-- Added data-target to link to the content section ID -->
             <a href="#settings" title="Settings" data-target="settings-section">
               <svg viewBox="0 0 24 24">
                 <path
@@ -70,6 +64,20 @@
                 />
               </svg>
               <span>Settings</span></a
+            >
+          </li>
+          <li>
+            <a
+              href="#profile"
+              title="User Profile"
+              data-target="user-profile-section"
+            >
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.83 6-3.83s5.97 1.84 6 3.83c-1.29 1.94-3.5 3.22-6 3.22z"
+                />
+              </svg>
+              <span>Profile</span></a
             >
           </li>
         </ul>
@@ -83,7 +91,6 @@
       ></div>
 
       <main class="main-content">
-        <!-- The navbar remains persistent across sections -->
         <header class="navbar">
           <div
             class="hamburger"
@@ -96,7 +103,6 @@
             <div></div>
             <div></div>
           </div>
-          <!-- Search bar is now part of the dashboard section -->
           <div class="search-bar" id="main-search-bar">
             <input
               type="text"
@@ -118,8 +124,6 @@
           </div>
         </header>
 
-        <!-- Content Sections -->
-        <!-- Dashboard Section - Active by default -->
         <div id="dashboard-section" class="content-section active-content">
           <h1 class="section-title">Dashboard Overview</h1>
           <p class="section-description">
@@ -129,7 +133,6 @@
           <section class="posts" id="posts"></section>
         </div>
 
-        <!-- Posts Section -->
         <div id="posts-section" class="content-section">
           <h1 class="section-title">Manage Your Posts</h1>
           <p class="section-description">
@@ -147,7 +150,6 @@
           </div>
         </div>
 
-        <!-- Analytics Section -->
         <div id="analytics-section" class="content-section">
           <h1 class="section-title">Performance Analytics</h1>
           <p class="section-description">
@@ -163,7 +165,6 @@
           </div>
         </div>
 
-        <!-- Settings Section -->
         <div id="settings-section" class="content-section">
           <h1 class="section-title">Account Settings</h1>
           <p class="section-description">
@@ -179,7 +180,57 @@
             <button class="action-button">Edit Settings</button>
           </div>
         </div>
+
+        <div id="user-profile-section" class="content-section">
+          <h1 class="section-title">User Profile</h1>
+          <p class="section-description">
+            View and update your personal profile information.
+          </p>
+          <div class="profile-details">
+            <img
+              id="profile-img-display"
+              src="https://randomuser.me/api/portraits/men/34.jpg"
+              alt="User profile"
+              class="profile-large-img"
+            />
+            <div class="profile-info">
+              <div class="profile-name">
+                <span id="profile-name-display">John Doe</span>
+                <button
+                  class="update-field-btn"
+                  data-field="name"
+                  aria-label="Update name"
+                >
+                  Update
+                </button>
+              </div>
+              <div class="profile-username">
+                <span id="profile-username-display">johndoe</span>
+                <button
+                  class="update-field-btn"
+                  data-field="username"
+                  aria-label="Update username"
+                >
+                  Update
+                </button>
+              </div>
+              <p id="profile-email-display" class="profile-email">
+                john.doe@example.com
+              </p>
+            </div>
+          </div>
+        </div>
       </main>
+    </div>
+
+    <div id="update-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-button" id="modal-close-btn">&times;</span>
+        <h3 id="modal-title">Update Profile</h3>
+        <label for="modal-input">New Value:</label>
+        <input type="text" id="modal-input" placeholder="Enter new value" />
+        <button id="modal-save-btn">Save</button>
+      </div>
     </div>
     <script src="js/index.js"></script>
   </body>

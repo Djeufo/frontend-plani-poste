@@ -23,7 +23,6 @@ a {
 .container {
   display: flex;
   min-height: 100vh;
-  /* overflow-x: hidden is already on body, no need here */
 }
 
 /* --- Sidebar --- */
@@ -119,7 +118,9 @@ a {
   margin-left: 250px; /* Offset for the fixed sidebar width */
   padding: 2rem;
   flex-grow: 1; /* Takes up remaining space */
-  max-width: calc(100% - 250px); /* Adjust max-width based on sidebar presence */
+  max-width: calc(
+    100% - 250px
+  ); /* Adjust max-width based on sidebar presence */
   transition: margin-left 0.3s ease; /* Smooth transition when sidebar opens/closes */
 }
 
@@ -199,7 +200,7 @@ a {
   pointer-events: none;
 }
 
-/* --- User Profile --- */
+/* --- User Profile (Navbar small icon) --- */
 .profile {
   margin-left: 1.5rem;
   cursor: pointer;
@@ -223,7 +224,10 @@ a {
 /* --- Posts Grid (now part of Dashboard section) --- */
 .posts {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Slightly wider min-width */
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(320px, 1fr)
+  ); /* Slightly wider min-width */
   gap: 2rem; /* Increased gap */
 }
 
@@ -411,6 +415,182 @@ a {
   box-shadow: 0 6px 15px rgba(10, 114, 232, 0.4);
 }
 
+/* --- User Profile Section Specific Styles --- */
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.profile-large-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid #0a72e8;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.profile-info {
+  text-align: center;
+}
+
+.profile-name,
+.profile-username {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center content when buttons are present */
+  margin-bottom: 0.5rem;
+  gap: 10px; /* Space between text and button */
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+}
+
+.profile-name span {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #054a91;
+}
+
+.profile-username span {
+  font-size: 1.2rem;
+  color: #777;
+}
+
+.profile-email {
+  font-size: 1.1rem;
+  color: #555;
+  margin-top: 0.5rem;
+}
+
+.update-field-btn {
+  background: #0a72e8;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.update-field-btn:hover {
+  background: #054a91;
+  transform: translateY(-1px);
+}
+
+/* --- Modal Styles --- */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 2000; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0, 0, 0, 0.6); /* Black w/ opacity */
+  backdrop-filter: blur(5px); /* Blurred background */
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+}
+
+.modal.active {
+  display: flex; /* Show when active */
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 450px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  color: #054a91;
+  font-size: 1.6rem;
+  text-align: center;
+}
+
+.modal-content label {
+  font-weight: 600;
+  color: #555;
+}
+
+.modal-content input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.modal-content input[type="text"]:focus {
+  outline: none;
+  border-color: #0a72e8;
+  box-shadow: 0 0 8px rgba(10, 114, 232, 0.2);
+}
+
+.modal-content button {
+  background: #0a72e8;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 1.05rem;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(10, 114, 232, 0.3);
+  align-self: flex-end; /* Align save button to the right */
+}
+
+.modal-content button:hover {
+  background: #054a91;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(10, 114, 232, 0.4);
+}
+
+.close-button {
+  color: #aaa;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: #333;
+  text-decoration: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* --- Responsive Design --- */
 @media (max-width: 991px) {
   .main-content {
@@ -461,6 +641,31 @@ a {
   .section-title {
     font-size: 1.8rem;
   }
+
+  .profile-details {
+    gap: 1rem;
+  }
+
+  .profile-large-img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profile-name span {
+    font-size: 1.5rem;
+  }
+
+  .profile-username span {
+    font-size: 1.1rem;
+  }
+
+  .profile-email {
+    font-size: 1rem;
+  }
+
+  .modal-content {
+    padding: 20px;
+  }
 }
 
 @media (max-width: 500px) {
@@ -493,5 +698,11 @@ a {
 
   .profile {
     margin-left: 0.5rem;
+  }
+
+  .profile-name,
+  .profile-username {
+    flex-direction: column; /* Stack name/username and button */
+    gap: 5px;
   }
 }
