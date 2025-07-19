@@ -77,7 +77,7 @@ a {
   font-size: 1.1rem;
   padding: 0.75rem 1rem; /* Increased padding for better click area */
   border-radius: 8px; /* Slightly more rounded */
-  transition: background 0.3s ease, box-shadow 0.3s ease;
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
 }
 
 .nav-links a:hover,
@@ -119,9 +119,7 @@ a {
   margin-left: 250px; /* Offset for the fixed sidebar width */
   padding: 2rem;
   flex-grow: 1; /* Takes up remaining space */
-  max-width: calc(
-    100% - 250px
-  ); /* Adjust max-width based on sidebar presence */
+  max-width: calc(100% - 250px); /* Adjust max-width based on sidebar presence */
   transition: margin-left 0.3s ease; /* Smooth transition when sidebar opens/closes */
 }
 
@@ -222,13 +220,10 @@ a {
   box-shadow: 0 0 15px rgba(10, 114, 232, 0.6);
 }
 
-/* --- Posts Grid --- */
+/* --- Posts Grid (now part of Dashboard section) --- */
 .posts {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(320px, 1fr)
-  ); /* Slightly wider min-width */
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Slightly wider min-width */
   gap: 2rem; /* Increased gap */
 }
 
@@ -332,6 +327,90 @@ a {
   transform: scale(1.2); /* More prominent scale for liked */
 }
 
+/* --- New Content Section Styles --- */
+.content-section {
+  display: none; /* Hidden by default */
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem; /* Space below each section if needed */
+}
+
+.content-section.active-content {
+  display: block; /* Show the active section */
+}
+
+.section-title {
+  font-size: 2rem;
+  color: #054a91;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #0a72e8;
+  padding-bottom: 0.5rem;
+}
+
+.section-description {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 2rem;
+}
+
+.content-placeholder {
+  background: #f8f8f8;
+  border: 1px dashed #ccc;
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  color: #666;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.content-placeholder h3 {
+  color: #054a91;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.content-placeholder ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+  text-align: left;
+  width: 100%;
+}
+
+.content-placeholder li {
+  background: #e9f5ff;
+  border-left: 4px solid #0a72e8;
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 5px;
+}
+
+.action-button {
+  background: #0a72e8;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 30px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  margin-top: 1.5rem;
+  box-shadow: 0 4px 10px rgba(10, 114, 232, 0.3);
+}
+
+.action-button:hover {
+  background: #054a91;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(10, 114, 232, 0.4);
+}
+
 /* --- Responsive Design --- */
 @media (max-width: 991px) {
   .main-content {
@@ -365,13 +444,22 @@ a {
     margin-bottom: 1.5rem;
   }
 
-  .search-bar {
-    max-width: calc(100% - 100px); /* Adjust for hamburger and profile */
+  /* Search bar is now part of the dashboard section, so hide it if dashboard is not active */
+  #main-search-bar {
+    display: none; /* Hidden by default on mobile, shown by JS when dashboard is active */
   }
 
   .profile img {
     width: 38px;
     height: 38px;
+  }
+
+  .content-section {
+    padding: 1.5rem; /* Reduce padding on mobile */
+  }
+
+  .section-title {
+    font-size: 1.8rem;
   }
 }
 
@@ -391,10 +479,12 @@ a {
     gap: 1rem;
   }
 
-  .search-bar {
-    max-width: 100%;
-    order: 3; /* Move search bar to new line */
+  /* Search bar will be handled by JS based on active section */
+  #main-search-bar {
+    order: 3; /* Move search bar to new line if it's visible */
     margin-top: 0.8rem;
+    width: 100%; /* Take full width when wrapped */
+    max-width: none; /* Remove max-width constraint */
   }
 
   .hamburger {

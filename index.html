@@ -17,10 +17,16 @@
     <div class="container">
       <!--SIDE BAR NAV-->
       <nav class="sidebar" id="sidebar">
-        <h2>Social</h2>
+        <h2>DJEUFO</h2>
         <ul class="nav-links">
           <li>
-            <a href="#" class="active" title="Dashboard">
+            <!-- Added data-target to link to the content section ID -->
+            <a
+              href="#dashboard"
+              class="active"
+              title="Dashboard"
+              data-target="dashboard-section"
+            >
               <svg viewBox="0 0 24 24">
                 <path
                   d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8v-10h-8v10zm0-18v6h8V3h-8z"
@@ -30,7 +36,8 @@
             >
           </li>
           <li>
-            <a href="#" title="Posts">
+            <!-- Added data-target to link to the content section ID -->
+            <a href="#posts" title="Posts" data-target="posts-section">
               <svg viewBox="0 0 24 24">
                 <path
                   d="M19 3H5c-1.1 0-2 .9-2 2v14l7-3 7 3V5c0-1.1-.9-2-2-2z"
@@ -40,7 +47,12 @@
             >
           </li>
           <li>
-            <a href="#" title="Analytics">
+            <!-- Added data-target to link to the content section ID -->
+            <a
+              href="#analytics"
+              title="Analytics"
+              data-target="analytics-section"
+            >
               <svg viewBox="0 0 24 24">
                 <path
                   d="M3 17h2v-7H3v7zm4 0h2v-4H7v4zm4 0h2v-10h-2v10zm4 0h2v-2h-2v2zm4 0h2v-13h-2v13z"
@@ -50,7 +62,8 @@
             >
           </li>
           <li>
-            <a href="#" title="Settings">
+            <!-- Added data-target to link to the content section ID -->
+            <a href="#settings" title="Settings" data-target="settings-section">
               <svg viewBox="0 0 24 24">
                 <path
                   d="M19.14 12.936c.036-.3.057-.61.057-.936s-.02-.637-.057-.936l2.11-1.65a.5.5 0 000-.756l-2-2a.5.5 0 00-.756 0l-1.65 2.11c-.3-.036-.61-.057-.936-.057s-.637.02-.936.057L13.935 7.9a.5.5 0 00-.756 0l-2 2a.5.5 0 000 .756l2.11 1.65c-.036.3-.057.61-.057.936s.02.637.057.936l-2.11 1.65a.5.5 0 000 .756l2 2a.5.5 0 00.756 0l1.65-2.11c.3.036.61.057.936.057s.637-.02.936-.057l1.65 2.11a.5.5 0 00.756 0l2-2a.5.5 0 000-.756l-2.11-1.65zM12 15.5A3.5 3.5 0 1115.5 12 3.5 3.5 0 0112 15.5z"
@@ -70,6 +83,7 @@
       ></div>
 
       <main class="main-content">
+        <!-- The navbar remains persistent across sections -->
         <header class="navbar">
           <div
             class="hamburger"
@@ -82,7 +96,8 @@
             <div></div>
             <div></div>
           </div>
-          <div class="search-bar">
+          <!-- Search bar is now part of the dashboard section -->
+          <div class="search-bar" id="main-search-bar">
             <input
               type="text"
               id="searchInput"
@@ -103,9 +118,69 @@
           </div>
         </header>
 
-        <section class="posts" id="posts"></section>
+        <!-- Content Sections -->
+        <!-- Dashboard Section - Active by default -->
+        <div id="dashboard-section" class="content-section active-content">
+          <h1 class="section-title">Dashboard Overview</h1>
+          <p class="section-description">
+            Welcome to your social media dashboard! Here you can see a quick
+            overview of your latest posts and activity.
+          </p>
+          <section class="posts" id="posts"></section>
+        </div>
+
+        <!-- Posts Section -->
+        <div id="posts-section" class="content-section">
+          <h1 class="section-title">Manage Your Posts</h1>
+          <p class="section-description">
+            This section allows you to view, create, edit, and delete your
+            social media posts across all connected platforms.
+          </p>
+          <div class="content-placeholder">
+            <h3>Your Recent Posts</h3>
+            <ul>
+              <li>Post "Hello World" - Published July 10, 2025</li>
+              <li>Post "New Product Launch" - Scheduled for July 25, 2025</li>
+              <li>Post "Weekly Recap" - Draft</li>
+            </ul>
+            <button class="action-button">Create New Post</button>
+          </div>
+        </div>
+
+        <!-- Analytics Section -->
+        <div id="analytics-section" class="content-section">
+          <h1 class="section-title">Performance Analytics</h1>
+          <p class="section-description">
+            Dive deep into your social media performance with detailed graphs
+            and metrics. Track engagement, reach, and audience growth.
+          </p>
+          <div class="content-placeholder">
+            <h3>Engagement Overview</h3>
+            <p>Likes: 1,250 | Comments: 340 | Shares: 180</p>
+            <h3>Audience Growth</h3>
+            <p>Followers this month: +5%</p>
+            <button class="action-button">View Full Report</button>
+          </div>
+        </div>
+
+        <!-- Settings Section -->
+        <div id="settings-section" class="content-section">
+          <h1 class="section-title">Account Settings</h1>
+          <p class="section-description">
+            Configure your profile, notification preferences, connected
+            accounts, and application settings.
+          </p>
+          <div class="content-placeholder">
+            <h3>Profile Information</h3>
+            <p>Email: user@example.com</p>
+            <p>Timezone: GMT+2</p>
+            <h3>Notifications</h3>
+            <p>Email alerts: On | Push notifications: Off</p>
+            <button class="action-button">Edit Settings</button>
+          </div>
+        </div>
       </main>
     </div>
-     <script src="js/index.js"></script>
+    <script src="js/index.js"></script>
   </body>
 </html>
