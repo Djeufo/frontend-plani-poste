@@ -2,47 +2,64 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Social Media Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      /* Reset & base */
+      /* --- Base Styles & Reset --- */
       * {
         box-sizing: border-box;
       }
+
       body {
         margin: 0;
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         background: #f0f4f9;
         color: #333;
-        overflow-x: hidden;
+        overflow-x: hidden; /* Prevent horizontal scroll from fixed sidebar transform */
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        line-height: 1.6;
       }
 
-      /* Layout */
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      /* --- Layout --- */
       .container {
         display: flex;
         min-height: 100vh;
-        overflow-x: hidden;
+        /* overflow-x: hidden is already on body, no need here */
       }
 
-      /* Sidebar */
+      /* --- Sidebar --- */
       .sidebar {
-        background: #054a91;
+        background: #054a91; /* Dark blue */
         color: white;
         width: 250px;
         display: flex;
         flex-direction: column;
         padding: 1.5rem 1rem;
-        position: fixed;
+        position: fixed; /* Fixed position for sidebar */
         top: 0;
         bottom: 0;
         left: 0;
-        transition: transform 0.3s ease;
-        z-index: 1100;
-        will-change: transform;
+        transition: transform 0.3s ease; /* Smooth transition for open/close */
+        z-index: 1100; /* Ensure sidebar is above other content */
+        will-change: transform; /* Optimize for animation */
       }
 
       .sidebar.closed {
-        transform: translateX(-100%);
+        transform: translateX(
+          -100%
+        ); /* Hides the sidebar by moving it off-screen */
       }
 
       .sidebar h2 {
@@ -52,13 +69,14 @@
         letter-spacing: 2px;
         user-select: none;
         text-align: center;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
       }
 
       .nav-links {
         list-style: none;
         padding: 0;
         margin: 0;
-        flex-grow: 1;
+        flex-grow: 1; /* Pushes content to bottom if needed */
       }
 
       .nav-links li {
@@ -72,26 +90,27 @@
         color: white;
         font-weight: 600;
         font-size: 1.1rem;
-        padding: 0.5rem 1rem;
-        border-radius: 6px;
-        transition: background 0.3s ease;
+        padding: 0.75rem 1rem; /* Increased padding for better click area */
+        border-radius: 8px; /* Slightly more rounded */
+        transition: background 0.3s ease, box-shadow 0.3s ease;
       }
 
       .nav-links a:hover,
       .nav-links a.active {
-        background: #0a72e8;
-        box-shadow: 0 2px 8px rgb(10 114 232 / 0.4);
+        background: #0a72e8; /* Lighter blue on hover/active */
+        box-shadow: 0 4px 12px rgba(10, 114, 232, 0.4); /* Enhanced shadow */
+        transform: translateY(-2px); /* Slight lift effect */
       }
 
       .nav-links svg {
         margin-right: 12px;
         width: 20px;
         height: 20px;
-        fill: white;
+        fill: currentColor; /* Inherits color from parent link */
         flex-shrink: 0;
       }
 
-      /* Overlay for mobile sidebar */
+      /* --- Overlay for mobile sidebar --- */
       .overlay {
         position: fixed;
         top: 0;
@@ -99,43 +118,50 @@
         right: 0;
         bottom: 0;
         background: rgba(0, 0, 0, 0.3);
-        z-index: 1050;
+        z-index: 1050; /* Below sidebar but above content */
         opacity: 0;
-        pointer-events: none;
+        pointer-events: none; /* Allows clicks through when not active */
         transition: opacity 0.3s ease;
       }
+
       .overlay.active {
         opacity: 1;
-        pointer-events: auto;
+        pointer-events: auto; /* Enables clicks when active */
       }
 
-      /* Main content */
+      /* --- Main Content Area --- */
       .main-content {
-        margin-left: 250px;
+        margin-left: 250px; /* Offset for the fixed sidebar width */
         padding: 2rem;
-        flex-grow: 1;
-        max-width: calc(100% - 250px);
-        transition: margin-left 0.3s ease;
+        flex-grow: 1; /* Takes up remaining space */
+        max-width: calc(
+          100% - 250px
+        ); /* Adjust max-width based on sidebar presence */
+        transition: margin-left 0.3s ease; /* Smooth transition when sidebar opens/closes */
       }
 
-      /* Navbar */
+      /* --- Navbar --- */
       .navbar {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 2rem;
-        position: relative;
+        background: white; /* Add a background for visibility */
+        padding: 0.8rem 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       }
 
-      /* Hamburger toggle button */
+      /* --- Hamburger Toggle Button --- */
       .hamburger {
-        display: none;
+        display: none; /* Hidden by default, shown in media queries for mobile */
         flex-direction: column;
         justify-content: space-around;
         width: 28px;
         height: 22px;
         cursor: pointer;
         margin-right: 1rem;
+        padding: 4px 0; /* Make it easier to click */
       }
 
       .hamburger div {
@@ -146,17 +172,18 @@
         transition: all 0.3s ease;
       }
 
-      /* Hamburger active animation */
+      /* Hamburger active (X) animation */
       .hamburger.active div:nth-child(1) {
-        transform: rotate(45deg) translate(5px, 5px);
+        transform: translateY(9px) rotate(45deg); /* Adjust translate based on height of bar + gap */
       }
       .hamburger.active div:nth-child(2) {
         opacity: 0;
       }
       .hamburger.active div:nth-child(3) {
-        transform: rotate(-45deg) translate(5px, -5px);
+        transform: translateY(-9px) rotate(-45deg); /* Adjust translate based on height of bar + gap */
       }
 
+      /* --- Search Bar --- */
       .search-bar {
         flex-grow: 1;
         max-width: 400px;
@@ -165,81 +192,87 @@
 
       .search-bar input {
         width: 100%;
-        padding: 0.6rem 2.5rem 0.6rem 1rem;
-        border-radius: 25px;
-        border: 1px solid #ccc;
+        padding: 0.8rem 2.8rem 0.8rem 1.2rem; /* Increased padding */
+        border-radius: 30px; /* More rounded */
+        border: 1px solid #ddd; /* Lighter border */
         font-size: 1rem;
-        transition: border-color 0.3s ease;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
       }
 
       .search-bar input:focus {
         outline: none;
         border-color: #0a72e8;
-        box-shadow: 0 0 8px rgb(10 114 232 / 0.5);
+        box-shadow: 0 0 10px rgba(10, 114, 232, 0.3);
       }
 
       .search-bar svg {
         position: absolute;
-        right: 10px;
+        right: 15px; /* Adjust position */
         top: 50%;
         transform: translateY(-50%);
         width: 20px;
         height: 20px;
-        fill: #0a72e8;
+        fill: #999; /* Softer color for icon */
         pointer-events: none;
       }
 
+      /* --- User Profile --- */
       .profile {
         margin-left: 1.5rem;
         cursor: pointer;
-        flex-shrink: 0;
+        flex-shrink: 0; /* Prevent shrinking */
       }
 
       .profile img {
         width: 42px;
         height: 42px;
         border-radius: 50%;
-        border: 2px solid #0a72e8;
+        border: 3px solid #0a72e8; /* Thicker border */
         object-fit: cover;
-        transition: transform 0.3s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
       }
 
       .profile img:hover {
-        transform: scale(1.1);
-        box-shadow: 0 0 12px #0a72e8;
+        transform: scale(1.08); /* Slightly less aggressive scale */
+        box-shadow: 0 0 15px rgba(10, 114, 232, 0.6);
       }
 
-      /* Posts grid */
+      /* --- Posts Grid --- */
       .posts {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 1.8rem;
+        grid-template-columns: repeat(
+          auto-fit,
+          minmax(320px, 1fr)
+        ); /* Slightly wider min-width */
+        gap: 2rem; /* Increased gap */
       }
 
       .post-card {
         background: white;
-        border-radius: 12px;
-        box-shadow: 0 2px 10px rgb(0 0 0 / 0.1);
+        border-radius: 16px; /* More rounded corners */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Softer, larger shadow */
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        transition: box-shadow 0.3s ease;
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
       }
 
       .post-card:hover {
-        box-shadow: 0 6px 20px rgb(10 114 232 / 0.25);
+        box-shadow: 0 8px 25px rgba(10, 114, 232, 0.2); /* Hover shadow more prominent */
+        transform: translateY(-5px); /* Lift effect on hover */
       }
 
       .post-header {
         display: flex;
         align-items: center;
-        padding: 1rem;
+        padding: 1.2rem;
         border-bottom: 1px solid #eee;
+        background: #fafafa; /* Slight background for header */
       }
 
       .post-header img {
-        width: 44px;
-        height: 44px;
+        width: 48px; /* Slightly larger image */
+        height: 48px;
         border-radius: 50%;
         object-fit: cover;
         margin-right: 1rem;
@@ -248,25 +281,26 @@
 
       .post-user {
         font-weight: 700;
-        font-size: 1.1rem;
+        font-size: 1.15rem; /* Slightly larger font */
         color: #054a91;
       }
 
       .post-date {
-        font-size: 0.85rem;
+        font-size: 0.9rem; /* Slightly larger font */
         color: #777;
         margin-left: auto;
+        white-space: nowrap; /* Prevent date from wrapping */
       }
 
       .post-content {
-        padding: 1rem;
+        padding: 1.2rem;
         font-size: 1rem;
         color: #333;
         flex-grow: 1;
       }
 
       .post-image {
-        max-height: 280px;
+        max-height: 300px; /* Slightly taller images */
         object-fit: cover;
         width: 100%;
         border-top: 1px solid #eee;
@@ -275,9 +309,11 @@
 
       .post-actions {
         display: flex;
-        padding: 0.8rem 1rem;
+        padding: 1rem 1.2rem;
         justify-content: space-between;
         align-items: center;
+        border-top: 1px solid #eee;
+        background: #fafafa;
       }
 
       .btn {
@@ -289,66 +325,107 @@
         font-size: 1rem;
         display: flex;
         align-items: center;
-        gap: 6px;
-        transition: color 0.3s ease;
+        gap: 8px; /* Increased gap */
+        transition: color 0.3s ease, transform 0.2s ease;
         user-select: none;
       }
 
       .btn:hover {
         color: #054a91;
+        transform: translateY(-2px);
       }
 
       .btn svg {
-        width: 20px;
-        height: 20px;
+        width: 22px; /* Slightly larger icons */
+        height: 22px;
         fill: currentColor;
         transition: transform 0.3s ease;
       }
 
       .btn.liked svg {
-        fill: #e0245e;
-        transform: scale(1.1);
+        fill: #e0245e; /* Red for liked */
+        transform: scale(1.2); /* More prominent scale for liked */
       }
 
-      /* Responsive */
+      /* --- Responsive Design --- */
       @media (max-width: 991px) {
         .main-content {
-          margin-left: 0;
-          max-width: 100%;
-          padding: 1.5rem 1rem 2rem 1rem;
+          margin-left: 0; /* No offset when sidebar is hidden */
+          max-width: 100%; /* Take full width */
+          padding: 1.5rem 1rem 2rem 1rem; /* Adjust padding for smaller screens */
         }
       }
 
       @media (max-width: 768px) {
-        /* Hide sidebar by default */
+        /* Sidebar is hidden by default on small screens */
         .sidebar {
           transform: translateX(-100%);
-          width: 250px;
+          width: 280px; /* Slightly wider sidebar on mobile */
+          box-shadow: 2px 0 15px rgba(0, 0, 0, 0.3); /* Add shadow when open */
         }
 
-        /* Show sidebar when open */
+        /* Show sidebar when 'open' class is applied by JS */
         .sidebar.open {
           transform: translateX(0);
-          box-shadow: 2px 0 15px rgba(0, 0, 0, 0.3);
         }
 
-        /* Show hamburger */
+        /* Show hamburger menu on small screens */
         .hamburger {
           display: flex;
         }
+
+        /* Adjust navbar spacing on mobile */
+        .navbar {
+          padding: 0.6rem 1rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .search-bar {
+          max-width: calc(100% - 100px); /* Adjust for hamburger and profile */
+        }
+
+        .profile img {
+          width: 38px;
+          height: 38px;
+        }
       }
 
-      @media (max-width: 400px) {
+      @media (max-width: 500px) {
         .posts {
-          grid-template-columns: 1fr;
+          grid-template-columns: 1fr; /* Single column on very small screens */
+          gap: 1.5rem;
+        }
+
+        .post-card {
+          border-radius: 12px;
+        }
+
+        .navbar {
+          flex-wrap: wrap; /* Allow items to wrap on very small screens */
+          justify-content: center;
+          gap: 1rem;
+        }
+
+        .search-bar {
+          max-width: 100%;
+          order: 3; /* Move search bar to new line */
+          margin-top: 0.8rem;
+        }
+
+        .hamburger {
+          margin-right: 0.5rem;
+        }
+
+        .profile {
+          margin-left: 0.5rem;
         }
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <nav class="sidebar closed" id="sidebar">
-        <h2>Dashboard</h2>
+      <nav class="sidebar" id="sidebar">
+        <h2>Social</h2>
         <ul class="nav-links">
           <li>
             <a href="#" class="active" title="Dashboard">
@@ -387,13 +464,18 @@
                   d="M19.14 12.936c.036-.3.057-.61.057-.936s-.02-.637-.057-.936l2.11-1.65a.5.5 0 000-.756l-2-2a.5.5 0 00-.756 0l-1.65 2.11c-.3-.036-.61-.057-.936-.057s-.637.02-.936.057L13.935 7.9a.5.5 0 00-.756 0l-2 2a.5.5 0 000 .756l2.11 1.65c-.036.3-.057.61-.057.936s.02.637.057.936l-2.11 1.65a.5.5 0 000 .756l2 2a.5.5 0 00.756 0l1.65-2.11c.3.036.61.057.936.057s.637-.02.936-.057l1.65 2.11a.5.5 0 00.756 0l2-2a.5.5 0 000-.756l-2.11-1.65zM12 15.5A3.5 3.5 0 1115.5 12 3.5 3.5 0 0112 15.5z"
                 />
               </svg>
-              <span>⚙️ Settings</span></a
+              <span>Settings</span></a
             >
           </li>
         </ul>
       </nav>
 
-      <div class="overlay" id="overlay"></div>
+      <div
+        class="overlay"
+        id="overlay"
+        role="button"
+        aria-label="Close menu"
+      ></div>
 
       <main class="main-content">
         <header class="navbar">
@@ -434,181 +516,266 @@
     </div>
 
     <script>
-      const postsData = [
-        {
-          id: 1,
-          user: "John Doe",
-          userImg: "https://randomuser.me/api/portraits/men/1.jpg",
-          date: "2025-07-18",
-          content:
-            "Just finished my morning run! Feeling energized and ready to take on the day.",
-          image:
-            "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80",
-          liked: false,
-        },
-        {
-          id: 2,
-          user: "Jane Smith",
-          userImg: "https://randomuser.me/api/portraits/women/2.jpg",
-          date: "2025-07-17",
-          content:
-            "Loving this new recipe I tried out today. Healthy and delicious!",
-          image:
-            "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=600&q=80",
-          liked: false,
-        },
-        {
-          id: 3,
-          user: "Alex Johnson",
-          userImg: "https://randomuser.me/api/portraits/men/3.jpg",
-          date: "2025-07-16",
-          content:
-            "Excited about my upcoming trip to the mountains. Nature, here I come!",
-          image:
-            "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=600&q=80",
-          liked: false,
-        },
-      ];
+      document.addEventListener("DOMContentLoaded", () => {
+        try {
+          const postsData = [
+            {
+              id: 1,
+              user: "John Doe",
+              userImg: "https://randomuser.me/api/portraits/men/1.jpg",
+              date: "2025-07-18",
+              content:
+                "Just finished my morning run! Feeling energized and ready to take on the day.",
+              image:
+                "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80",
+              liked: false,
+            },
+            {
+              id: 2,
+              user: "Jane Smith",
+              userImg: "https://randomuser.me/api/portraits/women/2.jpg",
+              date: "2025-07-17",
+              content:
+                "Loving this new recipe I tried out today. Healthy and delicious!",
+              image:
+                "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=600&q=80",
+              liked: false,
+            },
+            {
+              id: 3,
+              user: "Alex Johnson",
+              userImg: "https://randomuser.me/api/portraits/men/3.jpg",
+              date: "2025-07-16",
+              content:
+                "Excited about my upcoming trip to the mountains. Nature, here I come!",
+              image:
+                "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=600&q=80",
+              liked: false,
+            },
+            {
+              id: 4,
+              user: "Emily White",
+              userImg:
+                "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=600&q=80",
+              date: "2025-07-15",
+              content:
+                "Starting a new book today. Any recommendations for thrillers?",
+              image:
+                "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=600&q=80", // No image for this post
+              liked: true,
+            },
+            {
+              id: 5,
+              user: "David Lee",
+              userImg: "https://randomuser.me/api/portraits/men/5.jpg",
+              date: "2025-07-14",
+              content: "Just adopted a new puppy! Welcome to the family, Max!",
+              image:
+                "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80",
+              liked: false,
+            },
+          ];
 
-      const postsContainer = document.getElementById("posts");
-      const searchInput = document.getElementById("searchInput");
+          const postsContainer = document.getElementById("posts");
+          const searchInput = document.getElementById("searchInput");
+          const sidebar = document.getElementById("sidebar");
+          const hamburger = document.getElementById("hamburger");
+          const overlay = document.getElementById("overlay");
 
-      // Render posts
-      function renderPosts(posts) {
-        postsContainer.innerHTML = "";
-        if (posts.length === 0) {
-          postsContainer.innerHTML =
-            '<p style="text-align:center; color:#666; font-size:1.2rem;">No posts found.</p>';
-          return;
-        }
-        posts.forEach((post) => {
-          const postCard = document.createElement("article");
-          postCard.className = "post-card";
-          postCard.innerHTML = `
-        <div class="post-header">
-          <img src="${post.userImg}" alt="${post.user} profile photo" />
-          <div class="post-user">${post.user}</div>
-          <div class="post-date">${new Date(
-            post.date
-          ).toLocaleDateString()}</div>
-        </div>
-        <div class="post-content">${post.content}</div>
-        ${
-          post.image
-            ? `<img class="post-image" src="${post.image}" alt="Post image" />`
-            : ""
-        }
-        <div class="post-actions">
-          <button class="btn like-btn ${
-            post.liked ? "liked" : ""
-          }" aria-pressed="${post.liked}" aria-label="Like post by ${
-            post.user
-          }" data-id="${post.id}">
-            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6.42 3.42 5 5.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5 18.58 5 20 6.42 20 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-            Like
-          </button>
-          <button class="btn share-btn" aria-label="Share post by ${
-            post.user
-          }" data-id="${post.id}">
-            <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a2.6 2.6 0 000-1.39L16 7.13a2.5 2.5 0 101.92 1.85zm-6-9.75a2.5 2.5 0 11-2.5 2.5 2.5 2.5 0 012.5-2.5z"/></svg>
-            Share
-          </button>
-        </div>
-      `;
-          postsContainer.appendChild(postCard);
-        });
+          // Helper to format dates
+          function formatDate(dateString) {
+            const options = { year: "numeric", month: "long", day: "numeric" };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+          }
 
-        // Add event listeners for like buttons
-        document.querySelectorAll(".like-btn").forEach((btn) => {
-          btn.onclick = () => {
-            const postId = +btn.dataset.id;
-            const post = postsData.find((p) => p.id === postId);
-            if (post) {
-              post.liked = !post.liked;
-              renderPosts(postsData);
+          // Render posts function
+          function renderPosts(posts) {
+            postsContainer.innerHTML = ""; // Clear existing posts
+            if (posts.length === 0) {
+              postsContainer.innerHTML =
+                '<p style="text-align:center; color:#666; font-size:1.2rem; padding: 2rem;">No posts found matching your search.</p>';
+              return;
             }
-          };
-        });
+            posts.forEach((post) => {
+              const postCard = document.createElement("article");
+              postCard.className = "post-card";
+              postCard.innerHTML = `
+                <div class="post-header">
+                  <img src="${post.userImg}" alt="${
+                post.user
+              } profile photo" loading="lazy" />
+                  <div>
+                    <div class="post-user">${post.user}</div>
+                    <div class="post-date">${formatDate(post.date)}</div>
+                  </div>
+                </div>
+                <div class="post-content">${post.content}</div>
+                ${
+                  post.image
+                    ? `<img class="post-image" src="${post.image}" alt="Post image for ${post.user}" loading="lazy" />`
+                    : ""
+                }
+                <div class="post-actions">
+                  <button class="btn like-btn ${
+                    post.liked ? "liked" : ""
+                  }" aria-pressed="${post.liked}" aria-label="Like post by ${
+                post.user
+              }" data-id="${post.id}">
+                    <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6.42 3.42 5 5.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5 18.58 5 20 6.42 20 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    Like
+                  </button>
+                  <button class="btn share-btn" aria-label="Share post by ${
+                    post.user
+                  }" data-id="${post.id}">
+                    <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a2.6 2.6 0 000-1.39L16 7.13a2.5 2.5 0 101.92 1.85zm-6-9.75a2.5 2.5 0 11-2.5 2.5 2.5 2.5 0 012.5-2.5z"/></svg>
+                    Share
+                  </button>
+                </div>
+              `;
+              postsContainer.appendChild(postCard);
+            });
 
-        // Add event listeners for share buttons
-        document.querySelectorAll(".share-btn").forEach((btn) => {
-          btn.onclick = () => {
-            const postId = +btn.dataset.id;
-            const post = postsData.find((p) => p.id === postId);
-            if (post) {
-              alert(
-                `Sharing post by ${post.user}:\n"${post.content.substring(
-                  0,
-                  40
-                )}..."`
-              );
+            // Add event listeners for like buttons (delegation or re-attach)
+            document.querySelectorAll(".like-btn").forEach((btn) => {
+              btn.onclick = () => {
+                const postId = +btn.dataset.id;
+                const post = postsData.find((p) => p.id === postId);
+                if (post) {
+                  post.liked = !post.liked;
+                  renderPosts(postsData); // Re-render to update UI
+                }
+              };
+            });
+
+            // Add event listeners for share buttons
+            document.querySelectorAll(".share-btn").forEach((btn) => {
+              btn.onclick = () => {
+                const postId = +btn.dataset.id;
+                const post = postsData.find((p) => p.id === postId);
+                if (post) {
+                  // Using Web Share API if available, fallback to alert
+                  if (navigator.share) {
+                    navigator
+                      .share({
+                        title: `Post by ${post.user}`,
+                        text: post.content.substring(0, 100) + "...",
+                        url: window.location.href, // Or a specific post URL
+                      })
+                      .catch((error) => console.error("Error sharing", error));
+                  } else {
+                    alert(
+                      `Sharing post by ${post.user}:\n"${post.content.substring(
+                        0,
+                        80
+                      )}..."\n(Share API not supported)`
+                    );
+                  }
+                }
+              };
+            });
+          }
+
+          // Initial render of all posts
+          renderPosts(postsData);
+
+          // Search filter functionality
+          searchInput.addEventListener("input", () => {
+            const query = searchInput.value.toLowerCase().trim();
+            const filtered = postsData.filter(
+              (post) =>
+                post.user.toLowerCase().includes(query) ||
+                post.content.toLowerCase().includes(query)
+            );
+            renderPosts(filtered);
+          });
+
+          // Sidebar toggle logic
+          function openSidebar() {
+            sidebar.classList.remove("closed");
+            sidebar.classList.add("open");
+            overlay.classList.add("active");
+            hamburger.classList.add("active");
+            document.body.style.overflow = "hidden"; // Prevent main content scroll
+            document.body.style.paddingRight = getScrollbarWidth() + "px"; // Prevent content reflow
+          }
+
+          function closeSidebar() {
+            sidebar.classList.add("closed");
+            sidebar.classList.remove("open");
+            overlay.classList.remove("active");
+            hamburger.classList.remove("active");
+            document.body.style.overflow = ""; // Restore scroll
+            document.body.style.paddingRight = ""; // Remove padding
+          }
+
+          // Function to get scrollbar width to prevent layout shift
+          function getScrollbarWidth() {
+            const outer = document.createElement("div");
+            outer.style.visibility = "hidden";
+            outer.style.overflow = "scroll"; // forcing scrollbar to appear
+            outer.style.msOverflowStyle = "scrollbar"; // needed for WinJS apps
+            document.body.appendChild(outer);
+            const inner = document.createElement("div");
+            outer.appendChild(inner);
+            const scrollbarWidth = outer.offsetWidth - inner.offsetWidth;
+            outer.parentNode.removeChild(outer);
+            return scrollbarWidth;
+          }
+
+          hamburger.addEventListener("click", () => {
+            if (sidebar.classList.contains("open")) {
+              closeSidebar();
+            } else {
+              openSidebar();
             }
-          };
-        });
-      }
+          });
 
-      renderPosts(postsData);
+          overlay.addEventListener("click", () => {
+            closeSidebar();
+          });
 
-      // Search filter
-      searchInput.addEventListener("input", () => {
-        const query = searchInput.value.toLowerCase();
-        const filtered = postsData.filter(
-          (post) =>
-            post.user.toLowerCase().includes(query) ||
-            post.content.toLowerCase().includes(query)
-        );
-        renderPosts(filtered);
-      });
+          // Close sidebar on Escape key
+          window.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && sidebar.classList.contains("open")) {
+              closeSidebar();
+            }
+          });
 
-      // Sidebar toggle logic
-      const sidebar = document.getElementById("sidebar");
-      const hamburger = document.getElementById("hamburger");
-      const overlay = document.getElementById("overlay");
+          // Initial sidebar state on load and resize
+          function setSidebarStateOnLoadAndResize() {
+            if (window.innerWidth <= 768) {
+              // On mobile, ensure sidebar is closed by default
+              closeSidebar();
+            } else {
+              // On desktop, ensure sidebar is open by default
+              sidebar.classList.remove("closed", "open");
+              overlay.classList.remove("active");
+              hamburger.classList.remove("active"); // Ensure hamburger is not active on desktop
+              document.body.style.overflow = "";
+              document.body.style.paddingRight = "";
+            }
+          }
 
-      function openSidebar() {
-        sidebar.classList.remove("closed");
-        sidebar.classList.add("open");
-        overlay.classList.add("active");
-        hamburger.classList.add("active");
-        document.body.style.overflow = "hidden"; // prevent scroll when sidebar open on mobile
-      }
+          // Set initial state
+          setSidebarStateOnLoadAndResize();
 
-      function closeSidebar() {
-        sidebar.classList.add("closed");
-        sidebar.classList.remove("open");
-        overlay.classList.remove("active");
-        hamburger.classList.remove("active");
-        document.body.style.overflow = ""; // restore scroll
-      }
-
-      hamburger.addEventListener("click", () => {
-        if (sidebar.classList.contains("open")) {
-          closeSidebar();
-        } else {
-          openSidebar();
+          // Re-evaluate sidebar state on window resize
+          window.addEventListener("resize", setSidebarStateOnLoadAndResize);
+        } catch (e) {
+          console.error("An error occurred during script execution:", e);
+          // Optionally, display a user-friendly error message
+          const errorMessageDiv = document.createElement("div");
+          errorMessageDiv.style.cssText = `
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: #ffcccc; color: #cc0000; padding: 15px 25px;
+            border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            font-family: sans-serif; z-index: 9999;
+          `;
+          errorMessageDiv.textContent =
+            "Oops! Something went wrong loading the dashboard. Please try refreshing the page.";
+          document.body.appendChild(errorMessageDiv);
         }
-      });
-
-      overlay.addEventListener("click", () => {
-        closeSidebar();
-      });
-
-      // Optional: close sidebar on Escape key
-      window.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && sidebar.classList.contains("open")) {
-          closeSidebar();
-        }
-      });
-
-      // On window resize, if wider than mobile breakpoint, reset sidebar styles
-      window.addEventListener("resize", () => {
-        if (window.innerWidth > 768) {
-          sidebar.classList.remove("closed", "open");
-          overlay.classList.remove("active");
-          hamburger.classList.remove("active");
-          document.body.style.overflow = "";
-        }
-      });
+      }); // End DOMContentLoaded
     </script>
   </body>
 </html>
